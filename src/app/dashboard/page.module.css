@@ -1,0 +1,238 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.rangeSwitch {
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+}
+
+.rangeButton {
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  padding: 7px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.rangeButtonActive {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-strong);
+}
+
+.summaryChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.statCard {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-surface-raised) 100%);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  text-align: left;
+}
+
+.statCardActive {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.statLabel {
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+}
+
+.statValue {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.statTrend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-primary-strong);
+  font-size: 0.82rem;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.chartCard {
+  display: grid;
+  gap: 12px;
+}
+
+.chartLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-secondary);
+  font-size: 0.84rem;
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-primary);
+}
+
+.legendDotSecondary {
+  background: var(--color-success);
+}
+
+.metricStack {
+  display: grid;
+  gap: 10px;
+}
+
+.metricRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+}
+
+.metricTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-secondary);
+}
+
+.metricValue {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.heatmap {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.heatCell {
+  padding: 10px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  color: var(--color-text-secondary);
+  text-align: center;
+  cursor: pointer;
+}
+
+.heatCellActive {
+  background: linear-gradient(135deg, var(--color-primary-soft), var(--color-success-soft));
+  color: var(--color-text-primary);
+  border-color: var(--color-primary);
+}
+
+.activityList,
+.alertList,
+.recList,
+.projectList,
+.agentList {
+  display: grid;
+  gap: 10px;
+}
+
+.activityItem,
+.alertItem,
+.recItem,
+.projectItem,
+.agentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.activityMeta,
+.projectMeta,
+.agentMeta {
+  display: grid;
+  gap: 4px;
+}
+
+.badgePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-strong);
+}
+
+.badgePillSuccess {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.badgePillWarning {
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
+}
+
+.badgePillDanger {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+@media (max-width: 1000px) {
+  .statsGrid,
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+}

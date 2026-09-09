@@ -1,0 +1,212 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.toolbarGroup,
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.heroCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-raised) 100%);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+}
+
+.heroStats {
+  display: grid;
+  gap: 10px;
+  min-width: 220px;
+}
+
+.heroStat {
+  display: grid;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.heroStat strong {
+  font-size: 1.1rem;
+}
+
+.heroStat span {
+  color: var(--color-text-secondary);
+  font-size: 0.84rem;
+}
+
+.tabs {
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  margin-bottom: 16px;
+}
+
+.tabButton {
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tabButtonActive {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-strong);
+}
+
+.gridTwo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.agentList,
+.ruleList,
+.sourceList,
+.versionList,
+.historyList {
+  display: grid;
+  gap: 10px;
+}
+
+.agentItem,
+.sourceItem,
+.versionItem,
+.historyItem,
+.ruleItem,
+.playgroundBubble,
+.playgroundBubbleActive {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.agentItem {
+  text-align: left;
+  cursor: pointer;
+}
+
+.agentItemActive {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.agentItem p,
+.versionItem p,
+.historyItem p,
+.playgroundBubble p,
+.playgroundBubbleActive p {
+  font-size: 0.84rem;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+}
+
+.overviewCard,
+.playgroundCard {
+  display: grid;
+  gap: 10px;
+}
+
+.overviewHeader,
+.playgroundFooter,
+.historyMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.metricRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+}
+
+.metricLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-secondary);
+}
+
+.metricValue {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.ruleItem {
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.playgroundBubble,
+.playgroundBubbleActive {
+  display: block;
+}
+
+.playgroundBubbleActive {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+}
+
+.scorePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--color-surface-raised);
+  color: var(--color-text-secondary);
+  font-size: 0.84rem;
+}
+
+@media (max-width: 900px) {
+  .heroCard,
+  .gridTwo {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
