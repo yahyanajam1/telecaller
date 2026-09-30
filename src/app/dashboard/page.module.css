@@ -171,6 +171,15 @@
   border-color: var(--color-primary);
 }
 
+.heatCellSelected {
+  box-shadow: 0 0 0 2px var(--color-primary-strong);
+}
+
+.heatmapSummary {
+  color: var(--color-text-secondary);
+  font-size: 0.88rem;
+}
+
 .activityList,
 .alertList,
 .recList,
@@ -194,6 +203,21 @@
   border-radius: var(--radius-md);
   background: var(--color-surface);
   cursor: pointer;
+}
+
+.activityItem:hover,
+.alertItem:hover,
+.recItem:hover,
+.projectItem:hover,
+.agentItem:hover,
+.activityItem:focus-visible,
+.alertItem:focus-visible,
+.recItem:focus-visible,
+.projectItem:focus-visible,
+.agentItem:focus-visible {
+  border-color: var(--color-primary);
+  outline: none;
+  background: var(--color-surface-raised);
 }
 
 .activityMeta,

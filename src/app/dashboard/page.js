@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { Activity, AlertTriangle, ArrowUpRight, BarChart3, Brain, CalendarClock, Clock3, CreditCard, MessageSquareText, Mic, PhoneCall, Sparkles, TrendingUp, Users, Waves } from "lucide-react";
 import { AppShell, SectionCard } from "@/components/app-shell";
 import styles from "./page.module.css";
@@ -50,6 +51,12 @@ const heatmapDays = [
   { day: "Sun", value: 81 },
 ];
 
+const chartValues = {
+  "7d": [62, 78, 71, 86, 82, 92, 75],
+  "30d": [68, 82, 74, 90, 86, 94, 78],
+  "90d": [73, 77, 81, 84, 89, 91, 95],
+};
+
 const topProjects = [
   { name: "Harbor Loft", value: "28 calls", change: "+14%" },
   { name: "Cedar Residences", value: "21 calls", change: "+9%" },
@@ -65,6 +72,7 @@ const topAgents = [
 export default function DashboardPage() {
   const [range, setRange] = useState("30d");
   const [activeMetric, setActiveMetric] = useState("Calls Today");
+  const [activeDay, setActiveDay] = useState("Wed");
 
   const selectedMetric = useMemo(() => statCards.find((card) => card.label === activeMetric) ?? statCards[0], [activeMetric]);
 
@@ -99,7 +107,7 @@ export default function DashboardPage() {
               <span className={styles.legendItem}><span className={`${styles.legendDot} ${styles.legendDotSecondary}`} /> Qualified leads</span>
             </div>
             <div style={{ display: "grid", gap: "10px" }}>
-              {[68, 82, 74, 90, 86, 94, 78].map((value, index) => (
+              {chartValues[range].map((value, index) => (
                 <div key={index} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <span style={{ color: "var(--color-text-muted)", minWidth: "48px" }}>{["M", "T", "W", "T", "F", "S", "S"][index]}</span>
                   <div style={{ flex: 1, height: "10px", borderRadius: "999px", background: "var(--color-surface-raised)", overflow: "hidden" }}>
@@ -133,24 +141,25 @@ export default function DashboardPage() {
         <SectionCard title="Activity heatmap" subtitle="Interactive engagement intensity">
           <div className={styles.heatmap}>
             {heatmapDays.map((item) => (
-              <button key={item.day} className={`${styles.heatCell} ${item.value > 85 ? styles.heatCellActive : ""}`}>
+              <button key={item.day} aria-pressed={activeDay === item.day} onClick={() => setActiveDay(item.day)} className={`${styles.heatCell} ${item.value > 85 ? styles.heatCellActive : ""} ${activeDay === item.day ? styles.heatCellSelected : ""}`}>
                 <div style={{ fontSize: "0.74rem", color: "var(--color-text-muted)" }}>{item.day}</div>
                 <div style={{ fontWeight: 700 }}>{item.value}</div>
               </button>
             ))}
           </div>
+          <p className={styles.heatmapSummary}>{activeDay}: {heatmapDays.find((item) => item.day === activeDay)?.value}% engagement</p>
         </SectionCard>
 
         <SectionCard title="Recent activity" subtitle="Latest actions across the org">
           <div className={styles.activityList}>
             {activityFeed.map((item) => (
-              <div key={item.title} className={styles.activityItem}>
+              <Link key={item.title} href={item.tone === "warning" ? "/unknown-questions" : item.title.includes("tour") ? "/appointments" : "/calls"} className={styles.activityItem}>
                 <div className={styles.activityMeta}>
                   <strong>{item.title}</strong>
                   <span style={{ color: "var(--color-text-secondary)", fontSize: "0.84rem" }}>{item.time}</span>
                 </div>
                 <span className={`${styles.badgePill} ${item.tone === "warning" ? styles.badgePillWarning : item.tone === "success" ? styles.badgePillSuccess : ""}`}>{item.tone === "warning" ? "Needs review" : item.tone === "success" ? "Healthy" : "Live"}</span>
-              </div>
+              </Link>
             ))}
           </div>
         </SectionCard>
@@ -160,10 +169,10 @@ export default function DashboardPage() {
         <SectionCard title="Top projects" subtitle="Most active property campaigns">
           <div className={styles.projectList}>
             {topProjects.map((project) => (
-              <div key={project.name} className={styles.projectItem}>
+              <Link key={project.name} href="/projects" className={styles.projectItem}>
                 <div className={styles.projectMeta}><strong>{project.name}</strong><span style={{ color: "var(--color-text-secondary)", fontSize: "0.84rem" }}>{project.value}</span></div>
                 <span className={styles.badgePill}>{project.change}</span>
-              </div>
+              </Link>
             ))}
           </div>
         </SectionCard>
@@ -171,10 +180,10 @@ export default function DashboardPage() {
         <SectionCard title="Top agents" subtitle="Best performance this week">
           <div className={styles.agentList}>
             {topAgents.map((agent) => (
-              <div key={agent.name} className={styles.agentItem}>
+              <Link key={agent.name} href="/calls" className={styles.agentItem}>
                 <div className={styles.agentMeta}><strong>{agent.name}</strong><span style={{ color: "var(--color-text-secondary)", fontSize: "0.84rem" }}>{agent.value}</span></div>
                 <span className={styles.badgePillSuccess}>{agent.change}</span>
-              </div>
+              </Link>
             ))}
           </div>
         </SectionCard>
@@ -184,10 +193,10 @@ export default function DashboardPage() {
         <SectionCard title="Alerts" subtitle="Actionable issues and watchpoints">
           <div className={styles.alertList}>
             {alerts.map((alert) => (
-              <div key={alert.title} className={styles.alertItem}>
+              <Link key={alert.title} href={alert.title.includes("Credit") ? "/billing" : alert.title.includes("prompt") ? "/prompts" : "/calls"} className={styles.alertItem}>
                 <div className={styles.activityMeta}><strong>{alert.title}</strong><span style={{ color: "var(--color-text-secondary)", fontSize: "0.84rem" }}>{alert.detail}</span></div>
                 <span className={`${styles.badgePill} ${alert.tone === "warning" ? styles.badgePillWarning : alert.tone === "danger" ? styles.badgePillDanger : ""}`}>{alert.tone === "warning" ? "Watch" : alert.tone === "danger" ? "Urgent" : "Review"}</span>
-              </div>
+              </Link>
             ))}
           </div>
         </SectionCard>
@@ -195,10 +204,10 @@ export default function DashboardPage() {
         <SectionCard title="Recommendations" subtitle="Suggested improvements for the team">
           <div className={styles.recList}>
             {recs.map((rec) => (
-              <div key={rec.title} className={styles.recItem}>
+              <Link key={rec.title} href={rec.title.includes("prompt") ? "/prompts" : rec.title.includes("staffing") ? "/analytics" : "/knowledge"} className={styles.recItem}>
                 <div className={styles.activityMeta}><strong>{rec.title}</strong><span style={{ color: "var(--color-text-secondary)", fontSize: "0.84rem" }}>{rec.detail}</span></div>
                 <span className={`${styles.badgePill} ${rec.tone === "warning" ? styles.badgePillWarning : rec.tone === "success" ? styles.badgePillSuccess : ""}`}>{rec.tone === "warning" ? "Improve" : rec.tone === "success" ? "Great" : "Act"}</span>
-              </div>
+              </Link>
             ))}
           </div>
         </SectionCard>

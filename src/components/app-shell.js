@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
   Activity,
@@ -16,6 +16,7 @@ import {
   FileText,
   KeyRound,
   LayoutGrid,
+  Menu,
   Mic,
   PhoneCall,
   PlayCircle,
@@ -26,6 +27,7 @@ import {
   Users,
   Wand2,
   Workflow,
+  X,
   Zap,
 } from "lucide-react";
 import styles from "./app-shell.module.css";
@@ -62,22 +64,43 @@ export function AppShell({
   children,
   primaryActionLabel = "New campaign",
   onPrimaryAction,
+  headerActionLabel,
+  onHeaderAction,
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const currentPath = useMemo(() => pathname || "/dashboard", [pathname]);
+  const matchingPages = useMemo(() => navItems.filter((item) => item.label.toLowerCase().includes(query.trim().toLowerCase())).slice(0, 5), [query]);
+
+  const exportTable = () => {
+    const table = document.querySelector(".content table");
+    if (!table) {
+      window.print();
+      return;
+    }
+    const csv = [...table.rows].map((row) => [...row.cells].map((cell) => `"${cell.innerText.replaceAll('"', '""')}"`).join(",")).join("\n");
+    const file = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(file);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${title.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
-        <div className={styles.brandBlock}>
+        <Link href="/dashboard" className={styles.brandBlock} aria-label="Aurelia Voice home" title="Go to dashboard">
           <div className={styles.brandMark}>A</div>
           <div>
             <strong>Aurelia Voice</strong>
             <p>Enterprise AI calling</p>
           </div>
-        </div>
+        </Link>
 
         <div className={styles.sidebarSection}>
           <button className={styles.primaryButton} onClick={onPrimaryAction || (() => setDialogOpen(true))}>
@@ -112,15 +135,32 @@ export function AppShell({
             {breadcrumb.length > 0 ? breadcrumb.map((item, index) => <span key={item}>{index > 0 ? " / " : ""}{item}</span>) : <span> / {title}</span>}
           </div>
           <div className={styles.topbarActions}>
-            <label className={styles.searchBox}>
-              <Search size={16} />
-              <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={searchPlaceholder} />
-            </label>
-            <button className={styles.ghostButton} onClick={() => setDialogOpen(true)}>
-              <Bell size={16} /> Notify
+            <button className={styles.mobileNavToggle} aria-label={mobileNavOpen ? "Close navigation" : "Open navigation"} aria-expanded={mobileNavOpen} aria-controls="mobile-navigation" onClick={() => setMobileNavOpen((open) => !open)}>
+              {mobileNavOpen ? <X size={18} /> : <Menu size={18} />}
+              <span>{mobileNavOpen ? "Close" : "Menu"}</span>
             </button>
+            <div className={styles.searchWrap}>
+              <label className={styles.searchBox}>
+                <Search size={16} />
+                <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={searchPlaceholder} aria-label={searchPlaceholder} />
+              </label>
+              {query.trim() ? <div className={styles.searchResults}>
+                {matchingPages.length ? matchingPages.map((item) => <Link key={item.href} href={item.href} className={styles.searchResult} onClick={() => setQuery("")}>{item.label}</Link>) : <span className={styles.searchResultEmpty}>No matching pages</span>}
+              </div> : null}
+            </div>
+            <Link className={styles.ghostButton} href="/notifications">
+              <Bell size={16} /> Notify
+            </Link>
           </div>
         </header>
+
+        {mobileNavOpen ? <nav id="mobile-navigation" className={styles.mobileNavList} aria-label="Platform navigation">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const active = currentPath === item.href;
+            return <Link key={item.href} href={item.href} className={`${styles.mobileNavItem} ${active ? styles.navItemActive : ""}`} onClick={() => setMobileNavOpen(false)}><Icon size={16} /><span>{item.label}</span></Link>;
+          })}
+        </nav> : null}
 
         <section className={styles.pageHeader}>
           <div>
@@ -128,8 +168,10 @@ export function AppShell({
             <h1>{title}</h1>
           </div>
           <div className={styles.headerActions}>
-            <button className={styles.ghostButton}>Filters</button>
-            <button className={styles.primaryButton}>Export</button>
+            {headerActionLabel ? <button className={styles.primaryButton} onClick={onHeaderAction}><PlayCircle size={16} /> {headerActionLabel}</button> : <>
+              <Link className={styles.ghostButton} href="/analytics"><ChartColumn size={16} /> Analytics</Link>
+              <button className={styles.primaryButton} onClick={exportTable}><FileText size={16} /> Export</button>
+            </>}
           </div>
         </section>
 
@@ -143,7 +185,7 @@ export function AppShell({
             <p>This action will trigger the selected workflow and notify the team. Continue?</p>
             <div className={styles.modalActions}>
               <button className={styles.ghostButton} onClick={() => setDialogOpen(false)}>Cancel</button>
-              <button className={styles.primaryButton} onClick={() => setDialogOpen(false)}>Continue</button>
+              <button className={styles.primaryButton} onClick={() => { setDialogOpen(false); router.push("/calls"); }}>Open call queue</button>
             </div>
           </div>
         </div>
